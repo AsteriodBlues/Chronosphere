@@ -1,34 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Suspense } from 'react'
+import Scene from './components/sphere/Scene'
+import ErrorBoundary from './utils/errorBoundary'
+import { performanceMonitor } from './utils/performance'
+
+// Initialize performance monitoring
+performanceMonitor.initialize(process.env.NODE_ENV === 'development')
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <ErrorBoundary>
+      <div className="w-full h-screen bg-gradient-to-br from-slate-900 to-slate-800 overflow-hidden">
+        <Suspense fallback={
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-white text-xl font-space">
+              Initializing Chronosphere...
+            </div>
+          </div>
+        }>
+          <Scene />
+        </Suspense>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </ErrorBoundary>
   )
 }
 

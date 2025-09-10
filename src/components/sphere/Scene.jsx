@@ -4,7 +4,7 @@ import { useSettings } from '../../hooks'
 import { performanceMonitor } from '../../utils/performance'
 import LoadingFallback from './LoadingFallback'
 import Lights from './Lights'
-import Sphere from './Sphere'
+import InteractiveSphere from './InteractiveSphere'
 import Camera from './Camera'
 import Environment from './Environment'
 
@@ -57,8 +57,8 @@ export default function Scene() {
           {/* Camera controls */}
           <Camera />
           
-          {/* Main sphere */}
-          <Sphere />
+          {/* Interactive sphere with all effects */}
+          <InteractiveSphere />
           
           {/* Performance stats overlay */}
           {process.env.NODE_ENV === 'development' && (
