@@ -1,14 +1,19 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useTimerStore } from '../../stores/timerStore'
 import { useSettings } from '../../hooks'
 import * as THREE from 'three'
 import SphereGeometry from './SphereGeometry'
-import SphereMaterial from './SphereMaterial'
+import AdvancedSphereMaterial from './AdvancedSphereMaterial'
 import InternalGalaxy from './InternalGalaxy'
+import BreathingController from './BreathingController'
+import TranslucentSections from './TranslucentSections'
+import EnvironmentReflections from './EnvironmentReflections'
 
 export default function Sphere() {
   const sphereRef = useRef()
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, z: 0 })
+  const [breathingData, setBreathingData] = useState(null)
   const { sphere, timer } = useTimerStore()
   const { visual, getEffectiveColors } = useSettings()
   
@@ -23,68 +28,43 @@ export default function Sphere() {
     )
   }, [])
   
-  // Breathing animation
-  useFrame((state) => {
-    if (!sphereRef.current) return
-    
-    const time = state.clock.elapsedTime
-    
-    if (sphere.isBreathing && !sphere.exploding && !sphere.reforming) {
-      // Breathing cycle - 4 second cycle by default
-      const breathingCycle = (time * 1000) / sphere.breathingRate
-      const breathingScale = 1 + Math.sin(breathingCycle * Math.PI * 2) * 0.05
-      
-      sphereRef.current.scale.setScalar(breathingScale)
-      
-      // Add subtle rotation during breathing
-      sphereRef.current.rotation.y += 0.001
-      sphereRef.current.rotation.x += 0.0005
-    }
-    
-    // Pulsing during focus sessions
-    if (sphere.pulsing && timer.status === 'focus') {
-      const pulseSpeed = 2 // pulses per second
-      const pulseIntensity = 0.02
-      const pulse = Math.sin(time * pulseSpeed * Math.PI * 2) * pulseIntensity
-      
-      sphereRef.current.scale.setScalar(1 + pulse)
-    }
-    
-    // Explosion state
-    if (sphere.exploding) {
-      // The explosion will be handled by the particle system
-      // Here we just make the main sphere invisible
-      sphereRef.current.visible = false
-    } else if (sphere.reforming) {
-      // Reformation animation
-      const reformProgress = Math.min(time * 0.5, 1) // 2 second reformation
-      sphereRef.current.scale.setScalar(reformProgress)
-      sphereRef.current.visible = true
-    } else {
-      sphereRef.current.visible = true
-    }
-  })
+  const handleBreathingUpdate = (data) => {
+    setBreathingData(data)
+  }
   
   return (
-    <group>
-      <mesh 
-        ref={sphereRef}
-        geometry={geometry}
-        castShadow={visual.shadows}
-        receiveShadow={visual.shadows}
-      >
-        <SphereMaterial 
-          material={sphere.material}
-          glowIntensity={sphere.glowIntensity}
-          colors={colors}
-        />
-      </mesh>
-      
-      {/* Internal galaxy particle system */}
-      <InternalGalaxy 
-        particleCount={sphere.particleCount}
-        visible={!sphere.exploding}
-      />
-    </group>
+    <EnvironmentReflections>
+      {(envMap) => (
+        <group>
+          {/* Main sphere with advanced materials */}
+          <mesh 
+            ref={sphereRef}
+            geometry={geometry}
+            castShadow={visual.shadows}
+            receiveShadow={visual.shadows}
+          >
+            <AdvancedSphereMaterial 
+              mousePosition={mousePosition}
+            />
+          </mesh>
+          
+          {/* Breathing animation controller */}
+          <BreathingController 
+            sphereRef={sphereRef}
+            onBreathingUpdate={handleBreathingUpdate}
+          />
+          
+          {/* Translucent sections revealing interior */}
+          <TranslucentSections />
+          
+          {/* Internal galaxy particle system */}
+          <InternalGalaxy 
+            particleCount={sphere.particleCount}
+            visible={!sphere.exploding}
+            breathingData={breathingData}
+          />
+        </group>
+      )}
+    </EnvironmentReflections>
   )
 }
