@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background: radial-gradient(ellipse at bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/10 backdrop-blur-glass border border-white/20 shadow-glass;
+  }
+  
+  .sphere-glow {
+    @apply shadow-glow;
+  }
+  
+  .plasma-effect {
+    @apply shadow-plasma;
+  }
+}
+
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px currentColor;
+  }
+  
+  .breathing {
+    animation: breathe 4s ease-in-out infinite;
+  }
+  
+  .floating {
+    animation: float 6s ease-in-out infinite;
+  }
+}
