@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useSettings } from '../../hooks'
 import { useTimerStore } from '../../stores/timerStore'
 import InternalGalaxy from './InternalGalaxy'
-import TranslucentSections from './TranslucentSections'
+import HeartbeatController from './HeartbeatController'
 import * as THREE from 'three'
 
 export default function Sphere() {
@@ -44,6 +44,9 @@ export default function Sphere() {
         particleCount={sphere?.particleCount || 2000}
         visible={!sphere?.exploding}
       />
+      
+      {/* Heartbeat pulsing controller */}
+      <HeartbeatController sphereRef={sphereRef} />
     </group>
   )
 }
