@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
 import Scene from './components/sphere/Scene'
+import TimerControls from './components/ui/TimerControls'
+import NotificationManager, { ToastNotification } from './components/ui/NotificationManager'
 import ErrorBoundary from './utils/errorBoundary'
 import { performanceMonitor } from './utils/performance'
 
@@ -19,6 +21,13 @@ function App() {
         }>
           <Scene />
         </Suspense>
+        
+        {/* Timer Controls UI */}
+        <TimerControls />
+        
+        {/* Notification System */}
+        <NotificationManager />
+        <ToastNotification />
       </div>
     </ErrorBoundary>
   )

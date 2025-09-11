@@ -206,12 +206,38 @@ export const useTimer = () => {
     // State
     timer,
     sphere,
+    isActive: isActive(),
+    isPaused: isPaused(),
+    timeRemaining: timer.timeRemaining,
+    totalTime: timer.totalTime,
+    progress: getProgress(),
+    status: timer.status,
+    preset: 'pomodoro',
+    category: 'work',
     
     // Actions
+    start: startFocusSession,
+    pause: pauseTimer,
+    resume: () => startTimer(timer.timeRemaining, timer.status),
+    stop: stopTimer,
+    switchPreset: (preset) => {
+      // Handle preset switching
+      const presets = {
+        pomodoro: 25 * 60,
+        extended: 45 * 60,
+        sprint: 15 * 60,
+        flow: 90 * 60,
+        custom: 25 * 60
+      }
+      setSessionDuration(presets[preset] / 60)
+    },
+    switchCategory: (category) => {
+      // Handle category switching - store in timer state
+    },
+    
+    // Legacy actions
     startFocusSession,
     startBreakSession,
-    pauseTimer,
-    stopTimer,
     setSphereState,
     triggerExplosion,
     triggerReformation,
@@ -220,10 +246,6 @@ export const useTimer = () => {
     setBreakDuration,
     
     // Computed values
-    progress: getProgress(),
-    timeRemaining: getTimeRemaining(),
-    isActive: isActive(),
-    isPaused: isPaused(),
     isBreak: isBreak(),
     isFocusing: isFocusing(),
     isFlowState: isFlowState(),

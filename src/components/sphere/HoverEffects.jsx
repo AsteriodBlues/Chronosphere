@@ -1,6 +1,5 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Points, PointMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 
 export default function HoverEffects({ 
@@ -61,6 +60,28 @@ export default function HoverEffects({
     return { positions, colors, sizes }
   }, [mouseData])
   
+  // Create geometry and material
+  const [pointsGeometry, pointsMaterial] = useMemo(() => {
+    if (!hoverParticles) return [null, null]
+    
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(hoverParticles.positions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(hoverParticles.colors, 3))
+    geometry.setAttribute('size', new THREE.BufferAttribute(hoverParticles.sizes, 1))
+    
+    const material = new THREE.PointsMaterial({
+      size: 0.02,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      sizeAttenuation: true
+    })
+    
+    return [geometry, material]
+  }, [hoverParticles])
+  
   // Animate hover effects
   useFrame((state) => {
     if (!isActive || !hoverParticles) return
@@ -68,7 +89,7 @@ export default function HoverEffects({
     const time = state.clock.elapsedTime
     
     // Animate particles
-    if (particlesRef.current) {
+    if (particlesRef.current && hoverParticles) {
       const positions = particlesRef.current.geometry.attributes.position
       const colors = particlesRef.current.geometry.attributes.color
       
@@ -92,7 +113,7 @@ export default function HoverEffects({
     }
     
     // Animate glow
-    if (glowRef.current && mouseData) {
+    if (glowRef.current && mouseData && mouseData.intersectionPoint) {
       glowRef.current.position.copy(mouseData.intersectionPoint)
       
       // Pulsing glow
@@ -105,50 +126,45 @@ export default function HoverEffects({
     }
   })
   
-  if (!isActive || !mouseData || !hoverParticles) {
+  if (!isActive || !mouseData || !hoverParticles || !pointsGeometry) {
     return null
   }
   
   return (
     <group>
       {/* Hover particles */}
-      <Points
+      <points
         ref={particlesRef}
-        positions={hoverParticles.positions}
-        colors={hoverParticles.colors}
-      >
-        <PointMaterial
-          transparent
-          vertexColors
-          size={0.02}
-          sizeAttenuation
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </Points>
+        geometry={pointsGeometry}
+        material={pointsMaterial}
+      />
       
       {/* Glow sphere at intersection */}
-      <mesh ref={glowRef} position={mouseData.intersectionPoint}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshBasicMaterial
-          transparent
-          opacity={0.6}
-          color="#4ecdc4"
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+      {mouseData.intersectionPoint && (
+        <mesh ref={glowRef} position={mouseData.intersectionPoint}>
+          <sphereGeometry args={[0.1, 16, 16]} />
+          <meshBasicMaterial
+            transparent
+            opacity={0.6}
+            color="#4ecdc4"
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      )}
       
       {/* Ring effect */}
-      <mesh position={mouseData.intersectionPoint}>
-        <ringGeometry args={[0.15, 0.25, 32]} />
-        <meshBasicMaterial
-          transparent
-          opacity={0.4}
-          color="#ffffff"
-          side={THREE.DoubleSide}
-          blending={THREE.AdditiveBlending}
-        />
-      </mesh>
+      {mouseData.intersectionPoint && (
+        <mesh position={mouseData.intersectionPoint}>
+          <ringGeometry args={[0.15, 0.25, 32]} />
+          <meshBasicMaterial
+            transparent
+            opacity={0.4}
+            color="#ffffff"
+            side={THREE.DoubleSide}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+      )}
     </group>
   )
 }

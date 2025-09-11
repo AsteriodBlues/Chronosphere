@@ -1,6 +1,5 @@
 import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Points, PointMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import { useSettings } from '../../hooks'
 
@@ -28,96 +27,89 @@ export default function InternalGalaxy({ particleCount = 1000, visible = true })
       
       // Convert to cartesian coordinates
       positions[i3] = Math.cos(spiralAngle) * radius
-      positions[i3 + 1] = height
+      positions[i3 + 1] = height * (1 - radius / 2) // Compress center
       positions[i3 + 2] = Math.sin(spiralAngle) * radius
       
-      // Color based on distance from center
+      // Color based on distance from center (hot center, cool edges)
       const distanceFromCenter = Math.sqrt(
         positions[i3] ** 2 + 
         positions[i3 + 1] ** 2 + 
         positions[i3 + 2] ** 2
       )
       
-      // Color gradient from center to edge
-      if (distanceFromCenter < 0.5) {
-        // Core - bright white/yellow
-        color.setHSL(0.15, 0.8, 0.9)
-      } else if (distanceFromCenter < 1.0) {
-        // Middle - blue/purple
-        color.setHSL(0.7, 0.7, 0.7)
+      // Create gradient from center (bright) to edge (dim)
+      const intensity = 1 - (distanceFromCenter / 2)
+      
+      // Use effective colors from settings
+      if (colors?.primary) {
+        color.set(colors.primary)
       } else {
-        // Outer - red/orange
-        color.setHSL(0.05, 0.9, 0.6)
+        // Fallback color gradient (blue to purple)
+        color.setHSL(0.6 + distanceFromCenter * 0.2, 0.8, intensity)
       }
       
       colors_array[i3] = color.r
       colors_array[i3 + 1] = color.g
       colors_array[i3 + 2] = color.b
       
-      // Size based on distance (closer = larger)
-      sizes[i] = (2 - distanceFromCenter) * 0.02 + Math.random() * 0.01
+      // Particle size based on distance
+      sizes[i] = Math.random() * 0.05 * (1 + intensity)
     }
     
     return [positions, colors_array, sizes]
-  }, [particleCount])
+  }, [particleCount, colors])
   
-  // Animate the galaxy
+  // Animate galaxy rotation and pulsing
   useFrame((state) => {
-    if (!pointsRef.current || !visible) return
-    
-    const time = state.clock.elapsedTime
-    
-    // Rotate the entire galaxy slowly
-    pointsRef.current.rotation.y = time * 0.05
-    pointsRef.current.rotation.x = Math.sin(time * 0.02) * 0.1
-    
-    // Animate individual particles
-    const positions_attr = pointsRef.current.geometry.attributes.position
-    const colors_attr = pointsRef.current.geometry.attributes.color
-    
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3
+    if (pointsRef.current && visible) {
+      const time = state.clock.elapsedTime
       
-      // Get original position
-      const x = positions[i3]
-      const y = positions[i3 + 1]
-      const z = positions[i3 + 2]
+      // Slow rotation
+      pointsRef.current.rotation.y = time * 0.05
       
-      // Add subtle floating animation
-      const floatOffset = Math.sin(time * 0.5 + i * 0.01) * 0.02
-      positions_attr.array[i3 + 1] = y + floatOffset
+      // Gentle pulsing
+      const pulse = 1 + Math.sin(time * 0.5) * 0.1
+      pointsRef.current.scale.setScalar(pulse)
       
-      // Add spiral motion
-      const spiralSpeed = 0.01
-      const angle = Math.atan2(z, x) + spiralSpeed * time
-      const radius = Math.sqrt(x * x + z * z)
+      // Update particle colors for shimmer effect
+      const geometry = pointsRef.current.geometry
+      const colors = geometry.attributes.color
       
-      positions_attr.array[i3] = Math.cos(angle) * radius
-      positions_attr.array[i3 + 2] = Math.sin(angle) * radius
+      for (let i = 0; i < colors.count; i++) {
+        const i3 = i * 3
+        const shimmer = Math.sin(time * 2 + i * 0.1) * 0.2 + 0.8
+        colors.array[i3] = colors_array[i3] * shimmer
+        colors.array[i3 + 1] = colors_array[i3 + 1] * shimmer
+        colors.array[i3 + 2] = colors_array[i3 + 2] * shimmer
+      }
       
-      // Animate colors for twinkling effect
-      const twinkle = Math.sin(time * 2 + i * 0.1) * 0.3 + 0.7
-      colors_attr.array[i3] = colors_array[i3] * twinkle
-      colors_attr.array[i3 + 1] = colors_array[i3 + 1] * twinkle
-      colors_attr.array[i3 + 2] = colors_array[i3 + 2] * twinkle
+      colors.needsUpdate = true
     }
-    
-    positions_attr.needsUpdate = true
-    colors_attr.needsUpdate = true
   })
+  
+  const pointsGeometry = useMemo(() => {
+    const geometry = new THREE.BufferGeometry()
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors_array, 3))
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
+    return geometry
+  }, [positions, colors_array, sizes])
+  
+  const pointsMaterial = useMemo(() => {
+    return new THREE.PointsMaterial({
+      size: 0.02,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      sizeAttenuation: true
+    })
+  }, [])
   
   if (!visible) return null
   
   return (
-    <Points ref={pointsRef} positions={positions} colors={colors_array}>
-      <PointMaterial
-        transparent
-        vertexColors
-        size={0.02}
-        sizeAttenuation={true}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
-    </Points>
+    <points ref={pointsRef} geometry={pointsGeometry} material={pointsMaterial} />
   )
 }

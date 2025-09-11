@@ -96,15 +96,7 @@ export default function Environment() {
         <primitive key={index} object={cloud} />
       ))}
       
-      {/* Ambient fog for depth */}
-      {visual.backgroundType !== 'minimal' && (
-        <fog 
-          attach="fog" 
-          color={colors.background || '#1a1a2e'} 
-          near={50} 
-          far={200} 
-        />
-      )}
+      {/* Fog would be added to scene directly, not as component */}
     </group>
   )
 }

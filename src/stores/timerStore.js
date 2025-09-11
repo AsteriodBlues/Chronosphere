@@ -522,4 +522,3 @@ export const useTimerStore = create()(
       }
     )
   )
-)
