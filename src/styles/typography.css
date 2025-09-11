@@ -1,0 +1,481 @@
+/* Typography System - Space Grotesk & Inter */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* Typography Variables */
+:root {
+  /* Font families */
+  --font-primary: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Cascadia Code', monospace;
+  
+  /* Type scale (Major Third - 1.25) */
+  --text-xs: clamp(0.7rem, 0.66rem + 0.2vw, 0.8rem);
+  --text-sm: clamp(0.875rem, 0.83rem + 0.225vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1.06rem + 0.325vw, 1.375rem);
+  --text-xl: clamp(1.25rem, 1.18rem + 0.35vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.41rem + 0.45vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.76rem + 0.575vw, 2.25rem);
+  --text-4xl: clamp(2.25rem, 2.11rem + 0.7vw, 2.875rem);
+  --text-5xl: clamp(3rem, 2.81rem + 0.95vw, 3.75rem);
+  --text-6xl: clamp(3.75rem, 3.51rem + 1.2vw, 4.5rem);
+  --text-7xl: clamp(4.5rem, 4.21rem + 1.45vw, 5.625rem);
+  --text-8xl: clamp(6rem, 5.61rem + 1.95vw, 7.5rem);
+  --text-9xl: clamp(8rem, 7.48rem + 2.6vw, 10rem);
+  
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.1;
+  --leading-snug: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  --leading-loose: 2;
+  
+  /* Letter spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+  
+  /* Font weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  
+  /* Text colors */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-tertiary: rgba(255, 255, 255, 0.55);
+  --text-quaternary: rgba(255, 255, 255, 0.35);
+  --text-inverse: rgba(0, 0, 0, 0.9);
+  --text-accent: #4080ff;
+  --text-success: #00ff80;
+  --text-warning: #ff8040;
+  --text-error: #ff4080;
+}
+
+/* Base typography settings */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-secondary);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Heading styles */
+.text-display {
+  font-family: var(--font-primary);
+  font-size: var(--text-9xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tighter);
+  color: var(--text-primary);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h1, .text-h1 {
+  font-family: var(--font-primary);
+  font-size: var(--text-6xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+}
+
+h2, .text-h2 {
+  font-family: var(--font-primary);
+  font-size: var(--text-5xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  margin: 0 0 1.25rem 0;
+}
+
+h3, .text-h3 {
+  font-family: var(--font-primary);
+  font-size: var(--text-4xl);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
+h4, .text-h4 {
+  font-family: var(--font-primary);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-primary);
+  margin: 0 0 0.875rem 0;
+}
+
+h5, .text-h5 {
+  font-family: var(--font-primary);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem 0;
+}
+
+h6, .text-h6 {
+  font-family: var(--font-primary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: var(--text-secondary);
+  margin: 0 0 0.625rem 0;
+}
+
+/* Body text styles */
+p, .text-body {
+  font-family: var(--font-secondary);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  max-width: 65ch;
+}
+
+.text-lead {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xl);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+  max-width: 60ch;
+}
+
+.text-large {
+  font-family: var(--font-secondary);
+  font-size: var(--text-lg);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  color: var(--text-secondary);
+}
+
+.text-small {
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  color: var(--text-tertiary);
+}
+
+.text-micro {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+  color: var(--text-tertiary);
+}
+
+/* UI text styles */
+.text-ui {
+  font-family: var(--font-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-wide);
+}
+
+.text-label {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-none);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.text-caption {
+  font-family: var(--font-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+  color: var(--text-quaternary);
+}
+
+/* Monospace styles */
+.text-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+
+.text-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  color: var(--text-accent);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+/* Timer-specific styles */
+.text-timer {
+  font-family: var(--font-mono);
+  font-size: var(--text-5xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-none);
+  color: var(--text-primary);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: var(--tracking-wide);
+  font-variant-numeric: tabular-nums;
+}
+
+.text-timer-large {
+  font-family: var(--font-mono);
+  font-size: var(--text-7xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-none);
+  color: var(--text-primary);
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  letter-spacing: var(--tracking-wide);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Color variations */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-quaternary { color: var(--text-quaternary); }
+.text-inverse { color: var(--text-inverse); }
+.text-accent { color: var(--text-accent); }
+.text-success { color: var(--text-success); }
+.text-warning { color: var(--text-warning); }
+.text-error { color: var(--text-error); }
+
+/* Weight variations */
+.text-light { font-weight: var(--font-light); }
+.text-normal { font-weight: var(--font-normal); }
+.text-medium { font-weight: var(--font-medium); }
+.text-semibold { font-weight: var(--font-semibold); }
+.text-bold { font-weight: var(--font-bold); }
+
+/* Text alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Text transforms */
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+.text-normal-case { text-transform: none; }
+
+/* Text decoration */
+.text-underline { text-decoration: underline; }
+.text-line-through { text-decoration: line-through; }
+.text-no-underline { text-decoration: none; }
+
+/* Letter spacing utilities */
+.tracking-tighter { letter-spacing: var(--tracking-tighter); }
+.tracking-tight { letter-spacing: var(--tracking-tight); }
+.tracking-normal { letter-spacing: var(--tracking-normal); }
+.tracking-wide { letter-spacing: var(--tracking-wide); }
+.tracking-wider { letter-spacing: var(--tracking-wider); }
+.tracking-widest { letter-spacing: var(--tracking-widest); }
+
+/* Line height utilities */
+.leading-none { line-height: var(--leading-none); }
+.leading-tight { line-height: var(--leading-tight); }
+.leading-snug { line-height: var(--leading-snug); }
+.leading-normal { line-height: var(--leading-normal); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+.leading-loose { line-height: var(--leading-loose); }
+
+/* Special effects */
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.text-glow-strong {
+  text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-accent), var(--text-success));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-pulse {
+  background: linear-gradient(135deg, var(--text-accent), var(--text-success));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-pulse 3s ease-in-out infinite;
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.5) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Truncation utilities */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.text-truncate-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Animations */
+@keyframes gradient-pulse {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes text-glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+.text-pulse-glow {
+  animation: text-glow-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  .text-display {
+    font-size: var(--text-6xl);
+  }
+  
+  .text-timer-large {
+    font-size: var(--text-5xl);
+  }
+  
+  .text-timer {
+    font-size: var(--text-3xl);
+  }
+  
+  h1, .text-h1 {
+    font-size: var(--text-4xl);
+  }
+  
+  h2, .text-h2 {
+    font-size: var(--text-3xl);
+  }
+  
+  p, .text-body {
+    max-width: none;
+  }
+  
+  .text-lead {
+    max-width: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    font-family: 'Times New Roman', serif;
+    color: black;
+  }
+  
+  .text-glow,
+  .text-glow-strong,
+  .text-gradient,
+  .text-gradient-pulse,
+  .text-shimmer {
+    text-shadow: none;
+    background: none;
+    -webkit-text-fill-color: initial;
+    color: black;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-pulse,
+  .text-shimmer,
+  .text-pulse-glow {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgb(200, 200, 200);
+    --text-tertiary: rgb(150, 150, 150);
+    --text-quaternary: rgb(100, 100, 100);
+  }
+  
+  .text-gradient,
+  .text-gradient-pulse {
+    -webkit-text-fill-color: initial;
+    background: none;
+    color: var(--text-primary);
+  }
+}
