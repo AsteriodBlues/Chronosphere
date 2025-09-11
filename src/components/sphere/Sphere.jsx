@@ -1,10 +1,15 @@
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useSettings } from '../../hooks'
+import { useTimerStore } from '../../stores/timerStore'
+import InternalGalaxy from './InternalGalaxy'
+import TranslucentSections from './TranslucentSections'
+import * as THREE from 'three'
 
 export default function Sphere() {
   const sphereRef = useRef()
-  const { effectiveColors } = useSettings()
+  const { effectiveColors, visual } = useSettings()
+  const { sphere } = useTimerStore()
   
   // Basic breathing animation
   useFrame((state) => {
@@ -17,15 +22,28 @@ export default function Sphere() {
   })
   
   return (
-    <mesh ref={sphereRef} position={[0, 0, 0]} castShadow receiveShadow>
-      <sphereGeometry args={[2, 64, 64]} />
-      <meshStandardMaterial 
-        color={effectiveColors?.primary || "#0080ff"}
-        metalness={0.8}
-        roughness={0.2}
-        emissive={effectiveColors?.accent || "#001122"}
-        emissiveIntensity={0.1}
+    <group>
+      {/* Main sphere with enhanced material (no environment mapping) */}
+      <mesh ref={sphereRef} position={[0, 0, 0]} castShadow receiveShadow>
+        <sphereGeometry args={[2, 64, 64]} />
+        <meshPhysicalMaterial 
+          color={effectiveColors?.primary || "#0080ff"}
+          metalness={0.9}
+          roughness={0.1}
+          clearcoat={1.0}
+          clearcoatRoughness={0.1}
+          emissive={effectiveColors?.accent || "#001122"}
+          emissiveIntensity={0.05}
+          transparent
+          opacity={0.8}
+        />
+      </mesh>
+      
+      {/* Internal galaxy particle system */}
+      <InternalGalaxy 
+        particleCount={sphere?.particleCount || 2000}
+        visible={!sphere?.exploding}
       />
-    </mesh>
+    </group>
   )
 }

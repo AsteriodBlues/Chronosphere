@@ -2,7 +2,7 @@ import { useRef, useState, useCallback } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
-export default function MouseInteraction({ sphereRef, onMouseUpdate }) {
+export default function MouseInteraction({ sphereRef, onMouseUpdate, onClick }) {
   const { viewport, camera, raycaster, pointer } = useThree()
   const [isHovering, setIsHovering] = useState(false)
   const [clickPosition, setClickPosition] = useState(null)
