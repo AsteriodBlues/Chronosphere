@@ -82,22 +82,288 @@ export const useTimerStore = create()(
         timer: DEFAULT_TIMER,
         sphere: DEFAULT_SPHERE,
         
-        startTimer: (duration = 25 * 60) => {
+        // Timer Control Actions
+        startTimer: (duration = 25 * 60, state = 'focus') => {
+          const timer = get().timer
+          timer.engine.start(duration)
+          
+          const stateConfig = TIMER_STATES[state]
+          
+          set((store) => ({
+            timer: {
+              ...store.timer,
+              status: state,
+              timeRemaining: duration,
+              totalTime: duration,
+              isActive: true,
+              isPaused: false,
+              startTime: new Date().toISOString(),
+              id: generateSessionId(),
+            },
+            sphere: {
+              ...store.sphere,
+              material: stateConfig.sphereMaterial,
+              breathingRate: stateConfig.breathingRate,
+              glowIntensity: stateConfig.glowIntensity,
+              pulsing: state === 'focus' || state === 'flow',
+            }
+          }))
+        },
+
+        pauseTimer: () => {
+          const timer = get().timer
+          timer.engine.pause()
+          
           set((state) => ({
             timer: {
               ...state.timer,
-              status: 'focus',
-              timeRemaining: duration,
-              totalTime: duration,
-              id: crypto.randomUUID(),
+              isPaused: true,
             },
             sphere: {
               ...state.sphere,
-              material: 'crystal',
-              pulsing: true,
-              glowIntensity: 0.8,
+              material: 'diamond',
+              breathingRate: 8000,
+              glowIntensity: 0.2,
+              pulsing: false,
             }
           }))
+        },
+
+        resumeTimer: () => {
+          const timer = get().timer
+          timer.engine.resume()
+          const stateConfig = TIMER_STATES[timer.status]
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              isPaused: false,
+            },
+            sphere: {
+              ...state.sphere,
+              material: stateConfig.sphereMaterial,
+              breathingRate: stateConfig.breathingRate,
+              glowIntensity: stateConfig.glowIntensity,
+              pulsing: timer.status === 'focus' || timer.status === 'flow',
+            }
+          }))
+        },
+
+        stopTimer: () => {
+          const timer = get().timer
+          timer.engine.reset()
+          
+          set((state) => ({
+            timer: {
+              ...DEFAULT_TIMER,
+              preset: state.timer.preset,
+              category: state.timer.category,
+              engine: timer.engine,
+            },
+            sphere: {
+              ...state.sphere,
+              material: 'liquid',
+              breathingRate: 4000,
+              glowIntensity: 0.3,
+              pulsing: false,
+              exploding: false,
+              reforming: false,
+            }
+          }))
+        },
+
+        // State Transitions
+        transitionToState: (newState, duration = null) => {
+          const stateConfig = TIMER_STATES[newState]
+          if (!stateConfig) return
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              status: newState,
+            },
+            sphere: {
+              ...state.sphere,
+              material: stateConfig.sphereMaterial,
+              breathingRate: stateConfig.breathingRate,
+              glowIntensity: stateConfig.glowIntensity,
+              pulsing: newState === 'focus' || newState === 'flow' || newState === 'quantum',
+            }
+          }))
+
+          // Auto-transition back if duration specified
+          if (duration) {
+            setTimeout(() => {
+              const currentState = get().timer.status
+              if (currentState === newState) {
+                get().transitionToState('idle')
+              }
+            }, duration)
+          }
+        },
+
+        // Timer Updates
+        updateTimerState: (updates) => {
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              ...updates
+            }
+          }))
+        },
+
+        tick: () => {
+          const { timer } = get()
+          if (!timer.isActive || timer.isPaused) return
+          
+          const remaining = timer.engine.getRemainingTime()
+          const progress = timer.engine.getProgress()
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              timeRemaining: remaining,
+              progress
+            }
+          }))
+          
+          return remaining > 0
+        },
+
+        // Sphere Control
+        setSphereState: (updates) => {
+          set((state) => ({
+            sphere: {
+              ...state.sphere,
+              ...updates
+            }
+          }))
+        },
+
+        triggerExplosion: () => {
+          set((state) => ({
+            sphere: {
+              ...state.sphere,
+              exploding: true,
+              reforming: false,
+            }
+          }))
+          
+          // Auto-trigger reformation after explosion
+          setTimeout(() => {
+            get().triggerReformation()
+          }, 2000)
+        },
+
+        triggerReformation: () => {
+          set((state) => ({
+            sphere: {
+              ...state.sphere,
+              exploding: false,
+              reforming: true,
+            }
+          }))
+          
+          // Complete reformation
+          setTimeout(() => {
+            set((state) => ({
+              sphere: {
+                ...state.sphere,
+                reforming: false,
+              }
+            }))
+          }, 3000)
+        },
+
+        // Heartbeat Pulsing System
+        enableHeartbeat: (enabled = true) => {
+          set((state) => ({
+            sphere: {
+              ...state.sphere,
+              pulsing: enabled,
+            }
+          }))
+        },
+
+        setHeartbeatRate: (rate) => {
+          set((state) => ({
+            sphere: {
+              ...state.sphere,
+              breathingRate: rate,
+            }
+          }))
+        },
+
+        // Session Management
+        startBreak: (duration) => {
+          get().startTimer(duration, 'break')
+        },
+
+        enterFlowState: () => {
+          const flowDuration = TIMER_PRESETS.flow.focus
+          get().startTimer(flowDuration, 'flow')
+        },
+
+        enterQuantumMode: () => {
+          const quantumDuration = TIMER_PRESETS[get().timer.preset].focus
+          get().startTimer(quantumDuration, 'quantum')
+        },
+
+        completeSession: () => {
+          const { timer } = get()
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              completedSessions: state.timer.completedSessions + 1,
+              currentStreak: state.timer.currentStreak + 1,
+              endTime: new Date().toISOString(),
+            }
+          }))
+          
+          // Trigger completion explosion
+          get().triggerExplosion()
+        },
+
+        // Configuration
+        setPreset: (preset) => {
+          if (!TIMER_PRESETS[preset]) return false
+          
+          const presetConfig = TIMER_PRESETS[preset]
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              preset,
+              timeRemaining: presetConfig.focus,
+              totalTime: presetConfig.focus,
+            }
+          }))
+          
+          return true
+        },
+
+        setCategory: (category) => {
+          if (!SESSION_CATEGORIES[category]) return false
+          
+          set((state) => ({
+            timer: {
+              ...state.timer,
+              category,
+            }
+          }))
+          
+          return true
+        },
+
+        // Getters
+        getTimerState: () => get().timer,
+        getSphereState: () => get().sphere,
+        getProgress: () => get().timer.engine?.getProgress() || 0,
+        getRemainingTime: () => get().timer.engine?.getRemainingTime() || 0,
+        isActive: () => get().timer.isActive,
+        isPaused: () => get().timer.isPaused,
+        getCurrentStateConfig: () => TIMER_STATES[get().timer.status] || TIMER_STATES.idle
         },
         
         pauseTimer: () => {
