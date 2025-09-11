@@ -1,0 +1,511 @@
+/* Responsive Layout System */
+
+/* Breakpoint System */
+:root {
+  /* Breakpoint values */
+  --bp-xs: 320px;
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+  
+  /* Container max-widths */
+  --container-xs: 100%;
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* Responsive spacing scale */
+  --space-xs: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  --space-md: clamp(0.75rem, 0.6rem + 0.75vw, 1.25rem);
+  --space-lg: clamp(1rem, 0.8rem + 1vw, 2rem);
+  --space-xl: clamp(1.5rem, 1.2rem + 1.5vw, 3rem);
+  --space-2xl: clamp(2rem, 1.6rem + 2vw, 4rem);
+  --space-3xl: clamp(2.5rem, 2rem + 2.5vw, 5rem);
+  
+  /* Responsive border radius */
+  --radius-xs: clamp(0.125rem, 0.1rem + 0.125vw, 0.25rem);
+  --radius-sm: clamp(0.25rem, 0.2rem + 0.25vw, 0.5rem);
+  --radius-md: clamp(0.5rem, 0.4rem + 0.5vw, 0.75rem);
+  --radius-lg: clamp(0.75rem, 0.6rem + 0.75vw, 1rem);
+  --radius-xl: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+}
+
+/* Container System */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+}
+
+.container-xs { max-width: var(--container-xs); }
+.container-sm { max-width: var(--container-sm); }
+.container-md { max-width: var(--container-md); }
+.container-lg { max-width: var(--container-lg); }
+.container-xl { max-width: var(--container-xl); }
+.container-2xl { max-width: var(--container-2xl); }
+
+/* Grid System */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+.grid-auto-fit { 
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+}
+
+.grid-auto-fill { 
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+}
+
+/* Flex System */
+.flex {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+/* Responsive Visibility */
+.hidden { display: none; }
+.visible { display: block; }
+
+/* Mobile First Responsive Classes */
+
+/* Small devices (640px and up) */
+@media (min-width: 640px) {
+  .sm\:container { max-width: var(--container-sm); }
+  .sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sm\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .sm\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  .sm\:flex-row { flex-direction: row; }
+  .sm\:flex-col { flex-direction: column; }
+  
+  .sm\:hidden { display: none; }
+  .sm\:block { display: block; }
+  .sm\:flex { display: flex; }
+  .sm\:grid { display: grid; }
+}
+
+/* Medium devices (768px and up) */
+@media (min-width: 768px) {
+  .md\:container { max-width: var(--container-md); }
+  .md\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .md\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .md\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  .md\:flex-row { flex-direction: row; }
+  .md\:flex-col { flex-direction: column; }
+  
+  .md\:hidden { display: none; }
+  .md\:block { display: block; }
+  .md\:flex { display: flex; }
+  .md\:grid { display: grid; }
+}
+
+/* Large devices (1024px and up) */
+@media (min-width: 1024px) {
+  .lg\:container { max-width: var(--container-lg); }
+  .lg\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .lg\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .lg\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  .lg\:flex-row { flex-direction: row; }
+  .lg\:flex-col { flex-direction: column; }
+  
+  .lg\:hidden { display: none; }
+  .lg\:block { display: block; }
+  .lg\:flex { display: flex; }
+  .lg\:grid { display: grid; }
+}
+
+/* Extra large devices (1280px and up) */
+@media (min-width: 1280px) {
+  .xl\:container { max-width: var(--container-xl); }
+  .xl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .xl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .xl\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .xl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .xl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .xl\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  .xl\:flex-row { flex-direction: row; }
+  .xl\:flex-col { flex-direction: column; }
+  
+  .xl\:hidden { display: none; }
+  .xl\:block { display: block; }
+  .xl\:flex { display: flex; }
+  .xl\:grid { display: grid; }
+}
+
+/* 2XL devices (1536px and up) */
+@media (min-width: 1536px) {
+  .\32xl\:container { max-width: var(--container-2xl); }
+  .\32xl\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .\32xl\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  
+  .\32xl\:flex-row { flex-direction: row; }
+  .\32xl\:flex-col { flex-direction: column; }
+  
+  .\32xl\:hidden { display: none; }
+  .\32xl\:block { display: block; }
+  .\32xl\:flex { display: flex; }
+  .\32xl\:grid { display: grid; }
+}
+
+/* Responsive HUD Layouts */
+
+/* Mobile Layout (up to 768px) */
+@media (max-width: 767px) {
+  .hud-container {
+    /* Stack HUD elements vertically on mobile */
+    --hud-layout: mobile;
+  }
+  
+  /* Hide secondary HUD elements on mobile */
+  .hud-secondary {
+    display: none;
+  }
+  
+  /* Make timer display full width on mobile */
+  .timer-display-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--space-lg);
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+  }
+  
+  /* Simplify glass panels on mobile */
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Reduce animation complexity on mobile */
+  .animate-complex {
+    animation: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  /* Touch-friendly button sizes */
+  .btn-touch {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 20px;
+  }
+  
+  /* Mobile navigation */
+  .nav-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+  }
+}
+
+/* Tablet Layout (768px to 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hud-container {
+    --hud-layout: tablet;
+  }
+  
+  /* Tablet-specific HUD positioning */
+  .hud-left-panel {
+    width: 280px;
+  }
+  
+  .hud-right-panel {
+    width: 320px;
+  }
+  
+  /* Adjust timer display for tablet */
+  .timer-display-tablet {
+    max-width: 400px;
+  }
+  
+  /* Show side panels on tablet */
+  .hud-side-panel {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .hud-side-panel.active {
+    transform: translateX(0);
+  }
+}
+
+/* Desktop Layout (1024px and up) */
+@media (min-width: 1024px) {
+  .hud-container {
+    --hud-layout: desktop;
+  }
+  
+  /* Full HUD visibility on desktop */
+  .hud-full {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Desktop-specific positioning */
+  .hud-left-panel {
+    width: 320px;
+    left: var(--space-lg);
+  }
+  
+  .hud-right-panel {
+    width: 360px;
+    right: var(--space-lg);
+  }
+  
+  /* Enable hover effects on desktop */
+  .hud-hover-enabled {
+    transition: all 0.3s ease;
+  }
+  
+  .hud-hover-enabled:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Ultra-wide Layout (1536px and up) */
+@media (min-width: 1536px) {
+  .hud-container {
+    --hud-layout: ultrawide;
+  }
+  
+  /* Ultra-wide specific adjustments */
+  .hud-ultrawide {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .hud-left-panel {
+    width: 400px;
+  }
+  
+  .hud-right-panel {
+    width: 400px;
+  }
+  
+  /* Additional information density */
+  .stats-expanded {
+    display: block;
+  }
+}
+
+/* Responsive Glass Panel Adjustments */
+@media (max-width: 767px) {
+  .glass-panel--responsive {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    margin: var(--space-sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .glass-panel--responsive {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 16px;
+    margin: var(--space-md);
+  }
+}
+
+/* Responsive Typography Adjustments */
+@media (max-width: 767px) {
+  .timer-responsive {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+  
+  .heading-responsive {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+}
+
+@media (min-width: 768px) {
+  .timer-responsive {
+    font-size: clamp(3rem, 6vw, 4rem);
+  }
+  
+  .heading-responsive {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+}
+
+/* Portal System Responsive Adjustments */
+@media (max-width: 767px) {
+  .portal-mobile {
+    /* Larger portal tap targets on mobile */
+    min-width: 60px;
+    min-height: 60px;
+  }
+  
+  .wormhole-simplified {
+    /* Reduce visual complexity on mobile */
+    opacity: 0.8;
+  }
+}
+
+/* 3D Scene Responsive Adjustments */
+@media (max-width: 767px) {
+  .scene-mobile {
+    /* Reduce 3D complexity on mobile */
+    --particle-count: 500;
+    --animation-quality: low;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scene-tablet {
+    --particle-count: 1000;
+    --animation-quality: medium;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scene-desktop {
+    --particle-count: 2000;
+    --animation-quality: high;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .hud-container {
+    display: none;
+  }
+  
+  .glass-panel {
+    background: white;
+    color: black;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  
+  .timer-display {
+    color: black;
+    text-shadow: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .glass-panel {
+    background: rgba(0, 0, 0, 0.9);
+    border: 2px solid white;
+  }
+  
+  .hud-container {
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgb(255, 255, 255);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .hud-animate {
+    animation: none;
+    transition: none;
+  }
+  
+  .portal-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Orientation-based layouts */
+@media (orientation: portrait) {
+  .hud-portrait {
+    flex-direction: column;
+  }
+  
+  .timer-portrait {
+    margin-bottom: var(--space-xl);
+  }
+}
+
+@media (orientation: landscape) {
+  .hud-landscape {
+    flex-direction: row;
+  }
+  
+  .timer-landscape {
+    margin-right: var(--space-xl);
+  }
+}
+
+/* Container Queries (where supported) */
+@container (max-width: 400px) {
+  .panel-responsive {
+    padding: var(--space-sm);
+    font-size: 0.875rem;
+  }
+}
+
+@container (min-width: 600px) {
+  .panel-responsive {
+    padding: var(--space-lg);
+    font-size: 1rem;
+  }
+}
