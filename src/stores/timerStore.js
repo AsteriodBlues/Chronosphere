@@ -1,14 +1,68 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
+import { TimerEngine, generateSessionId, TIMER_PRESETS, SESSION_CATEGORIES } from '../utils/timeUtils'
+
+// Timer states with detailed definitions
+const TIMER_STATES = {
+  idle: { 
+    name: 'Idle', 
+    description: 'Ready to start a session',
+    sphereMaterial: 'liquid',
+    breathingRate: 4000,
+    glowIntensity: 0.3
+  },
+  focus: { 
+    name: 'Focus', 
+    description: 'Deep work session in progress',
+    sphereMaterial: 'crystal',
+    breathingRate: 6000,
+    glowIntensity: 0.8
+  },
+  break: { 
+    name: 'Break', 
+    description: 'Rest and recharge time',
+    sphereMaterial: 'glass',
+    breathingRate: 3000,
+    glowIntensity: 0.4
+  },
+  pause: { 
+    name: 'Paused', 
+    description: 'Session temporarily paused',
+    sphereMaterial: 'diamond',
+    breathingRate: 8000,
+    glowIntensity: 0.2
+  },
+  flow: { 
+    name: 'Flow State', 
+    description: 'Extended deep work session',
+    sphereMaterial: 'plasma',
+    breathingRate: 10000,
+    glowIntensity: 1.0
+  },
+  quantum: { 
+    name: 'Quantum Mode', 
+    description: 'Adaptive session with AI optimization',
+    sphereMaterial: 'liquid',
+    breathingRate: 5000,
+    glowIntensity: 0.9
+  }
+}
 
 const DEFAULT_TIMER = {
-  id: crypto.randomUUID(),
-  status: 'idle', // 'idle' | 'focus' | 'break' | 'pause' | 'flow' | 'quantum'
-  timeRemaining: 25 * 60, // 25 minutes in seconds
+  id: generateSessionId(),
+  status: 'idle',
+  timeRemaining: 25 * 60,
   totalTime: 25 * 60,
   sessionCount: 0,
+  completedSessions: 0,
   currentStreak: 0,
-  isBreathing: true,
+  preset: 'pomodoro',
+  category: 'work',
+  isActive: false,
+  isPaused: false,
+  startTime: null,
+  endTime: null,
+  engine: new TimerEngine(),
 }
 
 const DEFAULT_SPHERE = {
