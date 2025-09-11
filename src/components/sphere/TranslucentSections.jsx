@@ -7,9 +7,9 @@ import { useSettings } from '../../hooks'
 export default function TranslucentSections() {
   const groupRef = useRef()
   const { sphere } = useTimerStore()
-  const { getEffectiveColors } = useSettings()
+  const { effectiveColors } = useSettings()
   
-  const colors = getEffectiveColors()
+  const colors = effectiveColors
   
   // Create translucent sections that reveal the interior
   const sections = useMemo(() => {

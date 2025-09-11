@@ -11,9 +11,9 @@ import sphereFragmentShader from '../../shaders/sphereFragment.glsl?raw'
 export default function AdvancedSphereMaterial({ mousePosition = { x: 0, y: 0, z: 0 } }) {
   const materialRef = useRef()
   const { sphere } = useTimerStore()
-  const { getEffectiveColors } = useSettings()
+  const { effectiveColors } = useSettings()
   
-  const colors = getEffectiveColors()
+  const colors = effectiveColors
   
   // Material type mapping
   const materialTypes = {

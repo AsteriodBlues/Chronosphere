@@ -1,70 +1,31 @@
-import { useRef, useMemo, useState } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useTimerStore } from '../../stores/timerStore'
 import { useSettings } from '../../hooks'
-import * as THREE from 'three'
-import SphereGeometry from './SphereGeometry'
-import AdvancedSphereMaterial from './AdvancedSphereMaterial'
-import InternalGalaxy from './InternalGalaxy'
-import BreathingController from './BreathingController'
-import TranslucentSections from './TranslucentSections'
-import EnvironmentReflections from './EnvironmentReflections'
 
 export default function Sphere() {
   const sphereRef = useRef()
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0, z: 0 })
-  const [breathingData, setBreathingData] = useState(null)
-  const { sphere, timer } = useTimerStore()
-  const { visual, getEffectiveColors } = useSettings()
+  const { effectiveColors } = useSettings()
   
-  const colors = getEffectiveColors()
-  
-  // Create highly subdivided sphere geometry for smooth deformation
-  const geometry = useMemo(() => {
-    return new THREE.SphereGeometry(
-      2, // radius
-      128, // width segments (high for smooth deformation)
-      64   // height segments
-    )
-  }, [])
-  
-  const handleBreathingUpdate = (data) => {
-    setBreathingData(data)
-  }
+  // Basic breathing animation
+  useFrame((state) => {
+    if (sphereRef.current) {
+      const time = state.clock.getElapsedTime()
+      const breathe = 1 + Math.sin(time * 0.5) * 0.1
+      sphereRef.current.scale.setScalar(breathe)
+      sphereRef.current.rotation.y = time * 0.1
+    }
+  })
   
   return (
-    <EnvironmentReflections>
-      {(envMap) => (
-        <group>
-          {/* Main sphere with advanced materials */}
-          <mesh 
-            ref={sphereRef}
-            geometry={geometry}
-            castShadow={visual.shadows}
-            receiveShadow={visual.shadows}
-          >
-            <AdvancedSphereMaterial 
-              mousePosition={mousePosition}
-            />
-          </mesh>
-          
-          {/* Breathing animation controller */}
-          <BreathingController 
-            sphereRef={sphereRef}
-            onBreathingUpdate={handleBreathingUpdate}
-          />
-          
-          {/* Translucent sections revealing interior */}
-          <TranslucentSections />
-          
-          {/* Internal galaxy particle system */}
-          <InternalGalaxy 
-            particleCount={sphere.particleCount}
-            visible={!sphere.exploding}
-            breathingData={breathingData}
-          />
-        </group>
-      )}
-    </EnvironmentReflections>
+    <mesh ref={sphereRef} position={[0, 0, 0]} castShadow receiveShadow>
+      <sphereGeometry args={[2, 64, 64]} />
+      <meshStandardMaterial 
+        color={effectiveColors?.primary || "#0080ff"}
+        metalness={0.8}
+        roughness={0.2}
+        emissive={effectiveColors?.accent || "#001122"}
+        emissiveIntensity={0.1}
+      />
+    </mesh>
   )
 }

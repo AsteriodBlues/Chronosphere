@@ -1,4 +1,5 @@
 import Stats from 'stats.js'
+import React from 'react'
 
 class PerformanceMonitor {
   constructor() {

@@ -6,8 +6,8 @@ import { useSettings } from '../../hooks'
 
 export default function EnvironmentReflections({ children }) {
   const cubeCamera = useRef()
-  const { visual, getEffectiveColors } = useSettings()
-  const colors = getEffectiveColors()
+  const { visual, effectiveColors } = useSettings()
+  const colors = effectiveColors
   
   // Create procedural environment map
   const envMapRenderTarget = useMemo(() => {

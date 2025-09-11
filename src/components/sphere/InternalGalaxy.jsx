@@ -6,8 +6,8 @@ import { useSettings } from '../../hooks'
 
 export default function InternalGalaxy({ particleCount = 1000, visible = true }) {
   const pointsRef = useRef()
-  const { getEffectiveColors, visual } = useSettings()
-  const colors = getEffectiveColors()
+  const { effectiveColors, visual } = useSettings()
+  const colors = effectiveColors
   
   // Generate galaxy particle positions
   const [positions, colors_array, sizes] = useMemo(() => {

@@ -40,15 +40,18 @@ body {
 
 @layer components {
   .glass-panel {
-    @apply bg-white/10 backdrop-blur-glass border border-white/20 shadow-glass;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
   
   .sphere-glow {
-    @apply shadow-glow;
+    box-shadow: 0 0 60px rgba(0, 128, 255, 0.6);
   }
   
   .plasma-effect {
-    @apply shadow-plasma;
+    box-shadow: 0 0 80px rgba(123, 44, 191, 0.8);
   }
 }
 

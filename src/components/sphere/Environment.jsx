@@ -3,8 +3,8 @@ import * as THREE from 'three'
 import { useSettings } from '../../hooks'
 
 export default function Environment() {
-  const { visual, getEffectiveColors } = useSettings()
-  const colors = getEffectiveColors()
+  const { visual, effectiveColors } = useSettings()
+  const colors = effectiveColors
   
   // Create starfield background
   const starfield = useMemo(() => {
