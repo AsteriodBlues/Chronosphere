@@ -16,7 +16,8 @@ export default function HUD() {
   const [hudOpacity, setHudOpacity] = useState(1)
   
   const { currentPortal, isNavigating } = usePortalStore()
-  const { timerState } = useTimerStore()
+  const { timer } = useTimerStore()
+  const timerState = timer.status
   
   // Auto-hide HUD during navigation or when in focused mode
   useEffect(() => {
@@ -105,7 +106,9 @@ export default function HUD() {
 // Top Bar Component - Status and quick actions
 function TopBar() {
   const { currentPortal, userLevel } = usePortalStore()
-  const { timerState, sessionType } = useTimerStore()
+  const { timer } = useTimerStore()
+  const timerState = timer.status
+  const sessionType = timer.category || 'work'
   
   return (
     <div className="glass-panel glass-panel--tertiary glass-panel--sm flex items-center justify-between">
@@ -277,7 +280,9 @@ function FeatureMenu() {
 // Progress Tracker Component
 function ProgressTracker() {
   const { userLevel } = usePortalStore()
-  const { completedSessions, totalFocusTime } = useTimerStore()
+  const { timer } = useTimerStore()
+  const completedSessions = timer.completedSessions || 0
+  const totalFocusTime = completedSessions * 25 * 60
   
   const progressItems = [
     {

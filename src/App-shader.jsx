@@ -2,35 +2,42 @@ import { Suspense, useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as THREE from 'three'
+import HUD from './components/HUD'
+import Wormhole from './components/Portal/Wormhole'
+import { usePortalStore } from './systems/PortalManager'
 import './index.css'
+import './styles/glass/glassmorphism.css'
+import './styles/typography.css'
+import './styles/animations/micro-interactions.css'
+import './styles/responsive.css'
 
 // Extend OrbitControls
 extend({ OrbitControls: ThreeOrbitControls })
 
-// Simple Liquid Metal Sphere without external dependencies
+// Beautiful Blue-to-White Liquid Metal Sphere
 function SimpleLiquidMetalSphere() {
   const meshRef = useRef()
-  const materialRef = useRef()
   
-  // Create shader material with simplified shaders
+  // Create beautiful blue-to-white shader material
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColor: { value: new THREE.Color(0x0080ff) },
+        uColor: { value: new THREE.Color(0x0040ff) },
         uMetalness: { value: 0.9 },
         uRoughness: { value: 0.1 }
       },
       vertexShader: `
         varying vec3 vNormal;
         varying vec3 vPosition;
+        varying vec3 vWorldPosition;
         uniform float uTime;
         
         void main() {
           vNormal = normalize(normalMatrix * normal);
           vPosition = position;
           
-          // Simple displacement
+          // Smooth liquid displacement
           vec3 pos = position;
           float displacement = sin(position.x * 5.0 + uTime) * 0.05;
           displacement += sin(position.y * 5.0 + uTime * 1.1) * 0.05;
@@ -38,6 +45,7 @@ function SimpleLiquidMetalSphere() {
           pos += normal * displacement;
           
           vec4 worldPosition = modelMatrix * vec4(pos, 1.0);
+          vWorldPosition = worldPosition.xyz;
           gl_Position = projectionMatrix * viewMatrix * worldPosition;
         }
       `,
@@ -48,22 +56,41 @@ function SimpleLiquidMetalSphere() {
         uniform float uTime;
         varying vec3 vNormal;
         varying vec3 vPosition;
+        varying vec3 vWorldPosition;
         
         void main() {
           vec3 normal = normalize(vNormal);
-          vec3 viewDir = normalize(cameraPosition - vPosition);
+          vec3 viewDir = normalize(cameraPosition - vWorldPosition);
           
-          // Simple metallic effect
-          float fresnel = 1.0 - dot(normal, viewDir);
-          fresnel = pow(fresnel, 2.0);
+          // Beautiful balanced fresnel effect
+          float fresnel = 1.0 - max(0.0, dot(normal, viewDir));
+          fresnel = pow(fresnel, 2.0); // Balanced curve
           
-          vec3 color = uColor;
-          color += vec3(fresnel * 0.5);
+          // Perfect blue to white gradient - balanced
+          vec3 baseColor = uColor; // Deep blue
+          vec3 fresnelColor = vec3(0.9, 0.95, 1.0); // Near-white highlights
           
-          // Add shimmer
-          color += sin(uTime * 2.0) * 0.05;
+          // Balanced metallic reflection
+          float metallic = smoothstep(0.5, 0.85, fresnel); // Moderate metallic threshold
+          vec3 metallicColor = mix(baseColor, fresnelColor, metallic * 0.8);
           
-          gl_FragColor = vec4(color, 1.0);
+          // Balanced shimmer
+          float shimmer = sin(uTime * 2.0 + vPosition.x * 8.0) * 0.08;
+          shimmer += sin(uTime * 1.5 + vPosition.y * 6.0) * 0.06;
+          
+          // Beautiful balanced gradient
+          float gradient = (vWorldPosition.y + 2.0) / 4.0;
+          vec3 gradientColor = mix(baseColor * 1.1, fresnelColor * 0.8, gradient * 0.5);
+          
+          // Perfectly balanced combination
+          vec3 finalColor = mix(gradientColor, metallicColor, fresnel * 0.6);
+          finalColor += shimmer * mix(baseColor, fresnelColor, 0.4); // Balanced shimmer color
+          
+          // Balanced rim lighting
+          float rim = pow(fresnel, 0.8) * 0.5;
+          finalColor += rim * fresnelColor;
+          
+          gl_FragColor = vec4(finalColor, 1.0);
         }
       `
     })
@@ -208,6 +235,31 @@ function useTimer() {
   }
 }
 
+// Portal System Integration
+function PortalSystem() {
+  const { portals, initializePortals, setHoveredPortal } = usePortalStore()
+  
+  useEffect(() => {
+    initializePortals()
+  }, [initializePortals])
+  
+  const visiblePortals = Array.from(portals.values()).filter(portal => portal.isVisible)
+  
+  return (
+    <group>
+      {visiblePortals.map(portal => (
+        <Wormhole
+          key={portal.id}
+          portalData={portal}
+          onHover={setHoveredPortal}
+          onClick={(portalId) => console.log('Portal clicked:', portalId)}
+          isHovered={portal.effectsActive}
+        />
+      ))}
+    </group>
+  )
+}
+
 // Main App
 export default function AppWithShader() {
   const timer = useTimer()
@@ -230,114 +282,17 @@ export default function AppWithShader() {
           {/* Internal Galaxy */}
           <InternalGalaxy count={1500} />
           
+          {/* Portal System */}
+          <PortalSystem />
+          
           {/* Camera Controls */}
           <CameraControls />
         </Suspense>
       </Canvas>
       
-      {/* Timer UI */}
-      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-6 min-w-[380px] border border-white border-opacity-20">
-          <div className="text-center mb-6">
-            <div className="text-5xl font-mono font-bold text-white mb-2">
-              {timer.formatTime(timer.time)}
-            </div>
-            
-            <div className="text-sm text-gray-300 mb-3">
-              {timer.sessionType === 'focus' ? '🎯 Focus Session' : '☕ Break Time'}
-              {timer.isRunning ? ' • Active' : ' • Ready'}
-            </div>
-            
-            {/* Progress Bar */}
-            <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
-              <div 
-                className="h-2 rounded-full transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            
-            {/* Session Counter */}
-            <div className="text-xs text-gray-400">
-              Sessions completed: {timer.sessions}
-            </div>
-          </div>
-          
-          {/* Control Buttons */}
-          <div className="flex justify-center gap-3 mb-4">
-            {!timer.isRunning ? (
-              <button
-                onClick={() => timer.setIsRunning(true)}
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold transition-all transform hover:scale-105"
-              >
-                Start {timer.sessionType === 'focus' ? 'Focus' : 'Break'}
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={() => timer.setIsRunning(false)}
-                  className="bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-xl font-semibold transition-all"
-                >
-                  Pause
-                </button>
-                <button
-                  onClick={() => {
-                    timer.setIsRunning(false)
-                    timer.setTime(25 * 60)
-                  }}
-                  className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all"
-                >
-                  Stop
-                </button>
-              </>
-            )}
-          </div>
-          
-          {/* Session Type Switcher */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => {
-                timer.setSessionType('focus')
-                timer.setTime(25 * 60)
-                timer.setIsRunning(false)
-              }}
-              disabled={timer.isRunning}
-              className={`py-2 px-4 rounded-lg text-sm font-medium transition-all ${
-                timer.sessionType === 'focus'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              } ${timer.isRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              Focus (25m)
-            </button>
-            <button
-              onClick={() => {
-                timer.setSessionType('break')
-                timer.setTime(5 * 60)
-                timer.setIsRunning(false)
-              }}
-              disabled={timer.isRunning}
-              className={`py-2 px-4 rounded-lg text-sm font-medium transition-all ${
-                timer.sessionType === 'break'
-                  ? 'bg-green-600 text-white'
-                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-              } ${timer.isRunning ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              Break (5m)
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Advanced HUD System */}
+      <HUD />
       
-      {/* Shader Info */}
-      <div className="fixed top-4 right-4 bg-black bg-opacity-50 backdrop-blur-md rounded-lg p-3 border border-white border-opacity-20">
-        <div className="text-xs text-gray-400 space-y-1">
-          <div className="font-bold text-white">Liquid Metal Shader</div>
-          <div>✨ Active Displacement</div>
-          <div>🌊 Metallic Surface</div>
-          <div>💎 Fresnel Effects</div>
-          <div>🌌 Internal Galaxy</div>
-        </div>
-      </div>
     </div>
   )
 }

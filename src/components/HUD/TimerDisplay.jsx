@@ -6,16 +6,17 @@ export default function TimerDisplay() {
   const progressRef = useRef()
   
   const {
-    timeRemaining,
-    duration,
-    timerState,
-    sessionType,
+    timer,
     startTimer,
     pauseTimer,
-    stopTimer,
-    setSessionType,
-    completedSessions
+    stopTimer
   } = useTimerStore()
+  
+  const timeRemaining = timer.timeRemaining
+  const duration = timer.totalTime
+  const timerState = timer.status
+  const sessionType = timer.category || 'focus'
+  const completedSessions = timer.completedSessions || 0
   
   // Format time display
   const formatTime = (seconds) => {
@@ -168,7 +169,7 @@ export default function TimerDisplay() {
           <button
             key={key}
             onClick={() => {
-              setSessionType(key)
+              // Session type switching would be handled differently
               if (isRunning) stopTimer() // Auto-stop when switching during active session
             }}
             disabled={isRunning}
