@@ -10,6 +10,8 @@ extend({ OrbitControls: ThreeOrbitControls })
 // Simple Liquid Metal Sphere
 function SimpleLiquidMetalSphere() {
   const meshRef = useRef()
+  const [isHovered, setIsHovered] = useState(false)
+  const [isClicked, setIsClicked] = useState(false)
   
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -100,8 +102,21 @@ function SimpleLiquidMetalSphere() {
     }
   })
   
+  const handleSphereClick = () => {
+    setIsClicked(true)
+    console.log('Entering sphere...')
+    setTimeout(() => setIsClicked(false), 1000)
+  }
+
   return (
-    <mesh ref={meshRef} material={material}>
+    <mesh 
+      ref={meshRef} 
+      material={material}
+      onClick={handleSphereClick}
+      onPointerEnter={() => setIsHovered(true)}
+      onPointerLeave={() => setIsHovered(false)}
+      style={{ cursor: isHovered ? 'pointer' : 'default' }}
+    >
       <sphereGeometry args={[2, 64, 64]} />
     </mesh>
   )
@@ -121,17 +136,92 @@ function CameraControls() {
   return <orbitControls ref={controlsRef} args={[camera, gl.domElement]} />
 }
 
+// Internal Galaxy Particles
+function InternalGalaxy({ count = 1500 }) {
+  const pointsRef = useRef()
+  
+  const [positions, colors] = useMemo(() => {
+    const pos = new Float32Array(count * 3)
+    const col = new Float32Array(count * 3)
+    
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3
+      const radius = Math.random() * 1.8
+      const theta = Math.random() * Math.PI * 2
+      const phi = Math.acos(2 * Math.random() - 1)
+      
+      pos[i3] = radius * Math.sin(phi) * Math.cos(theta)
+      pos[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+      pos[i3 + 2] = radius * Math.cos(phi)
+      
+      const color = new THREE.Color().setHSL(0.6 + Math.random() * 0.2, 0.8, 0.5 + Math.random() * 0.5)
+      col[i3] = color.r
+      col[i3 + 1] = color.g
+      col[i3 + 2] = color.b
+    }
+    
+    return [pos, col]
+  }, [count])
+  
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    return geo
+  }, [positions, colors])
+  
+  useFrame((state) => {
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.05
+      const scale = 1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1
+      pointsRef.current.scale.setScalar(scale)
+    }
+  })
+  
+  return (
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial
+        size={0.02}
+        vertexColors
+        transparent
+        opacity={0.6}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </points>
+  )
+}
+
 // Simple HUD without complex imports
 function SimpleHUD() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  })
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const isMobile = windowSize.width < 768
+  
   const panelStyle = {
     position: 'fixed',
     background: 'rgba(255, 255, 255, 0.15)',
     backdropFilter: 'blur(12px)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
-    borderRadius: '12px',
-    padding: '16px',
+    borderRadius: isMobile ? '8px' : '12px',
+    padding: isMobile ? '12px' : '16px',
     color: 'white',
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: 'Inter, sans-serif',
+    fontSize: isMobile ? '14px' : '16px'
   }
 
   return (
@@ -161,17 +251,25 @@ function SimpleHUD() {
         <div style={{ fontSize: '14px', marginBottom: '16px', opacity: 0.8 }}>
           Ready to Focus
         </div>
-        <button style={{
-          background: '#3b82f6',
-          color: 'white',
-          border: 'none',
-          borderRadius: '8px',
-          padding: '8px 24px',
-          fontSize: '14px',
-          fontWeight: '500',
-          cursor: 'pointer',
-          transition: 'background 0.2s'
-        }}>
+        <button 
+          onClick={() => console.log('Timer started!')}
+          onMouseEnter={(e) => e.target.style.background = '#2563eb'}
+          onMouseLeave={(e) => e.target.style.background = '#3b82f6'}
+          style={{
+            background: '#3b82f6',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '8px 24px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+            transform: 'scale(1)'
+          }}
+          onMouseDown={(e) => e.target.style.transform = 'scale(0.95)'}
+          onMouseUp={(e) => e.target.style.transform = 'scale(1)'}
+        >
           Start Timer
         </button>
       </div>
@@ -211,6 +309,7 @@ export default function AppProgressive() {
         
         <Suspense fallback={null}>
           <SimpleLiquidMetalSphere />
+          <InternalGalaxy count={1500} />
           <CameraControls />
         </Suspense>
       </Canvas>
