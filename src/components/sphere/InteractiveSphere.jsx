@@ -4,12 +4,14 @@ import MouseInteraction from './MouseInteraction'
 import SurfaceRipples from './SurfaceRipples'
 import HoverEffects from './HoverEffects'
 import SpherePhysics from './SpherePhysics'
+import SphereSelector, { sphereThemes } from './SphereSelector'
 
 export default function InteractiveSphere() {
   const sphereRef = useRef()
   const [mouseData, setMouseData] = useState(null)
   const [ripples, setRipples] = useState([])
   const [rotationData, setRotationData] = useState(null)
+  const [currentTheme, setCurrentTheme] = useState('power')
   
   const handleMouseUpdate = (data) => {
     setMouseData(data)
@@ -52,31 +54,49 @@ export default function InteractiveSphere() {
     return age < ripple.life
   })
   
+  const handleThemeChange = (theme) => {
+    setCurrentTheme(theme.id)
+  }
+
+  const activeTheme = sphereThemes.find(t => t.id === currentTheme) || sphereThemes[0]
+
   return (
-    <group>
-      {/* Main sphere with internal galaxy */}
-      <Sphere ref={sphereRef} mouseData={mouseData} />
-      
-      {/* Mouse interaction system */}
-      <MouseInteraction 
-        sphereRef={sphereRef}
-        onMouseUpdate={handleMouseUpdate}
-        onClick={handleClick}
+    <>
+      {/* Sphere Theme Selector UI */}
+      <SphereSelector 
+        currentTheme={currentTheme}
+        onThemeChange={handleThemeChange}
       />
       
-      {/* Hover effects */}
-      <HoverEffects
-        mouseData={mouseData}
-        isActive={mouseData?.isHovering}
-        intensity={1.0}
-      />
-      
-      {/* Physics system for momentum-based rotation */}
-      <SpherePhysics
-        sphereRef={sphereRef}
-        mouseData={mouseData}
-        onRotationUpdate={handleRotationUpdate}
-      />
-    </group>
+      <group>
+        {/* Main sphere with internal galaxy */}
+        <Sphere 
+          ref={sphereRef} 
+          mouseData={mouseData}
+          theme={activeTheme}
+        />
+        
+        {/* Mouse interaction system */}
+        <MouseInteraction 
+          sphereRef={sphereRef}
+          onMouseUpdate={handleMouseUpdate}
+          onClick={handleClick}
+        />
+        
+        {/* Hover effects */}
+        <HoverEffects
+          mouseData={mouseData}
+          isActive={mouseData?.isHovering}
+          intensity={1.0}
+        />
+        
+        {/* Physics system for momentum-based rotation */}
+        <SpherePhysics
+          sphereRef={sphereRef}
+          mouseData={mouseData}
+          onRotationUpdate={handleRotationUpdate}
+        />
+      </group>
+    </>
   )
 }
