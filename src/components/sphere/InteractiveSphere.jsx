@@ -5,6 +5,7 @@ import SurfaceRipples from './SurfaceRipples'
 import HoverEffects from './HoverEffects'
 import SpherePhysics from './SpherePhysics'
 import SphereSelector, { sphereThemes } from './SphereSelector'
+import AnimatedSphere from './AnimatedSphere'
 
 export default function InteractiveSphere() {
   const sphereRef = useRef()
@@ -69,12 +70,15 @@ export default function InteractiveSphere() {
       />
       
       <group>
-        {/* Main sphere with internal galaxy */}
-        <Sphere 
-          ref={sphereRef} 
-          mouseData={mouseData}
-          theme={activeTheme}
-        />
+        {/* Animated wrapper for theme transitions */}
+        <AnimatedSphere theme={activeTheme} sphereRef={sphereRef}>
+          {/* Main sphere with internal galaxy */}
+          <Sphere 
+            ref={sphereRef} 
+            mouseData={mouseData}
+            theme={activeTheme}
+          />
+        </AnimatedSphere>
         
         {/* Mouse interaction system */}
         <MouseInteraction 
