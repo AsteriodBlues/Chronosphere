@@ -20,7 +20,7 @@ export default function Scene() {
       depth: true
     },
     camera: {
-      position: [0, 0, 8],
+      position: [0, 0, 15],
       fov: 45,
       near: 0.1,
       far: 1000
