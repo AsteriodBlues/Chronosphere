@@ -3,21 +3,26 @@ import { Canvas, useFrame, extend, useThree } from '@react-three/fiber'
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import * as THREE from 'three'
 import './index.css'
+import SphereSelector, { sphereThemes } from './components/sphere/SphereSelector'
 
 // Extend OrbitControls
 extend({ OrbitControls: ThreeOrbitControls })
 
 // Beautiful Blue-to-White Liquid Metal Sphere (from progressive version)
-function SimpleLiquidMetalSphere() {
+function SimpleLiquidMetalSphere({ theme }) {
   const meshRef = useRef()
   const [isHovered, setIsHovered] = useState(false)
   const [isClicked, setIsClicked] = useState(false)
+  
+  // Use theme colors if provided
+  const sphereColor = theme?.color || '#0080ff'
+  const emissiveColor = theme?.accent || '#001122'
   
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColor: { value: new THREE.Color(0x0040ff) },
+        uColor: { value: new THREE.Color(sphereColor) },
         uMetalness: { value: 0.9 },
         uRoughness: { value: 0.1 }
       },
@@ -89,7 +94,14 @@ function SimpleLiquidMetalSphere() {
         }
       `
     })
-  }, [])
+  }, [sphereColor])
+  
+  // Update material color when theme changes
+  useEffect(() => {
+    if (material) {
+      material.uniforms.uColor.value = new THREE.Color(sphereColor)
+    }
+  }, [sphereColor, material])
   
   useFrame((state) => {
     if (material) {
@@ -1141,6 +1153,13 @@ export default function AppIntegrated() {
   const [time, setTime] = useState(25 * 60)
   const [isRunning, setIsRunning] = useState(false)
   const [sessions, setSessions] = useState(0)
+  const [currentTheme, setCurrentTheme] = useState('power')
+  
+  const handleThemeChange = (theme) => {
+    setCurrentTheme(theme.id)
+  }
+  
+  const activeTheme = sphereThemes.find(t => t.id === currentTheme) || sphereThemes[0]
 
   useEffect(() => {
     if (isRunning && time > 0) {
@@ -1165,6 +1184,12 @@ export default function AppIntegrated() {
       overflow: 'hidden',
       position: 'relative'
     }}>
+      {/* Sphere Theme Selector */}
+      <SphereSelector 
+        currentTheme={currentTheme}
+        onThemeChange={handleThemeChange}
+      />
+      
       {/* Background Galaxy */}
       <BackgroundGalaxy 
         timerProgress={timerProgress}
@@ -1186,7 +1211,7 @@ export default function AppIntegrated() {
         <pointLight position={[-8, 8, 3]} intensity={0.25} color="#e0f0ff" />
         
         <Suspense fallback={null}>
-          <SimpleLiquidMetalSphere />
+          <SimpleLiquidMetalSphere theme={activeTheme} />
           <CameraControls />
         </Suspense>
       </Canvas>
