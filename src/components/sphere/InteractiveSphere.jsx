@@ -4,15 +4,13 @@ import MouseInteraction from './MouseInteraction'
 import SurfaceRipples from './SurfaceRipples'
 import HoverEffects from './HoverEffects'
 import SpherePhysics from './SpherePhysics'
-import SphereSelector, { sphereThemes } from './SphereSelector'
 import AnimatedSphere from './AnimatedSphere'
 
-export default function InteractiveSphere() {
+export default function InteractiveSphere({ theme }) {
   const sphereRef = useRef()
   const [mouseData, setMouseData] = useState(null)
   const [ripples, setRipples] = useState([])
   const [rotationData, setRotationData] = useState(null)
-  const [currentTheme, setCurrentTheme] = useState('power')
   
   const handleMouseUpdate = (data) => {
     setMouseData(data)
@@ -55,30 +53,17 @@ export default function InteractiveSphere() {
     return age < ripple.life
   })
   
-  const handleThemeChange = (theme) => {
-    setCurrentTheme(theme.id)
-  }
-
-  const activeTheme = sphereThemes.find(t => t.id === currentTheme) || sphereThemes[0]
-
   return (
-    <>
-      {/* Sphere Theme Selector UI */}
-      <SphereSelector 
-        currentTheme={currentTheme}
-        onThemeChange={handleThemeChange}
-      />
-      
-      <group>
-        {/* Animated wrapper for theme transitions */}
-        <AnimatedSphere theme={activeTheme} sphereRef={sphereRef}>
-          {/* Main sphere with internal galaxy */}
-          <Sphere 
-            ref={sphereRef} 
-            mouseData={mouseData}
-            theme={activeTheme}
-          />
-        </AnimatedSphere>
+    <group>
+      {/* Animated wrapper for theme transitions */}
+      <AnimatedSphere theme={theme} sphereRef={sphereRef}>
+        {/* Main sphere with internal galaxy */}
+        <Sphere 
+          ref={sphereRef} 
+          mouseData={mouseData}
+          theme={theme}
+        />
+      </AnimatedSphere>
         
         {/* Mouse interaction system */}
         <MouseInteraction 
@@ -99,8 +84,7 @@ export default function InteractiveSphere() {
           sphereRef={sphereRef}
           mouseData={mouseData}
           onRotationUpdate={handleRotationUpdate}
-        />
-      </group>
-    </>
+      />
+    </group>
   )
 }

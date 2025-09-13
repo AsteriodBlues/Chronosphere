@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useSettings } from '../../hooks'
 import { performanceMonitor } from '../../utils/performance'
 import LoadingFallback from './LoadingFallback'
@@ -7,8 +7,10 @@ import Lights from './Lights'
 import InteractiveSphere from './InteractiveSphere'
 import Camera from './Camera'
 import Environment from './Environment'
+import SphereSelector, { sphereThemes } from './SphereSelector'
 
 export default function Scene() {
+  const [currentTheme, setCurrentTheme] = useState('power')
   const { performance, visual } = useSettings()
 
   const canvasProps = {
@@ -44,8 +46,20 @@ export default function Scene() {
     }
   }
 
+  const handleThemeChange = (theme) => {
+    setCurrentTheme(theme.id)
+  }
+
+  const activeTheme = sphereThemes.find(t => t.id === currentTheme) || sphereThemes[0]
+
   return (
     <div className="w-full h-full relative overflow-hidden">
+      {/* Sphere Theme Selector UI - Outside Canvas */}
+      <SphereSelector 
+        currentTheme={currentTheme}
+        onThemeChange={handleThemeChange}
+      />
+      
       <Canvas {...canvasProps}>
         <Suspense fallback={<LoadingFallback />}>
           {/* Lighting setup */}
@@ -58,7 +72,7 @@ export default function Scene() {
           <Camera />
           
           {/* Interactive sphere with all effects */}
-          <InteractiveSphere />
+          <InteractiveSphere theme={activeTheme} />
           
           {/* Performance stats overlay */}
           {process.env.NODE_ENV === 'development' && (
