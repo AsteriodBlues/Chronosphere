@@ -363,7 +363,7 @@ export const useTimerStore = create()(
         getRemainingTime: () => get().timer.engine?.getRemainingTime() || 0,
         isActive: () => get().timer.isActive,
         isPaused: () => get().timer.isPaused,
-        getCurrentStateConfig: () => TIMER_STATES[get().timer.status] || TIMER_STATES.idle
+        getCurrentStateConfig: () => TIMER_STATES[get().timer.status] || TIMER_STATES.idle,
         },
         
         pauseTimer: () => {
