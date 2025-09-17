@@ -95,134 +95,84 @@ export default function SphereSelector({ currentTheme, onThemeChange }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        {/* Ultra-Modern Compact Selector */}
+        {/* Clean Glassmorphism Compact Selector */}
         {!isExpanded ? (
           <motion.button
             onClick={() => setIsExpanded(true)}
             className="relative group"
-            whileHover={{ scale: 1.02, y: -2 }}
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            {/* Dynamic glow effect */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl blur-2xl opacity-40"
-              style={{ background: selectedTheme.gradient }}
-              animate={{ opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            />
+            {/* Subtle glow */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
 
-            {/* Next-Gen Floating Container */}
-            <div className="relative bg-gradient-to-br from-white/15 via-white/8 to-white/3 backdrop-blur-[20px] rounded-[28px] p-3 border border-white/25 shadow-[0_32px_64px_rgba(0,0,0,0.4)] group-hover:shadow-[0_40px_80px_rgba(0,0,0,0.5)]">
-              {/* Animated border */}
-              <div className="absolute inset-0 rounded-[28px] p-[1px] bg-gradient-to-br from-white/30 via-transparent to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Clean Glass Container */}
+            <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl p-3 border border-white/20 shadow-lg flex items-center gap-3">
+              {/* Icon */}
+              <motion.div
+                className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl"
+                style={{
+                  background: `linear-gradient(135deg, ${selectedTheme.color}, ${selectedTheme.secondary})`,
+                  boxShadow: `0 8px 24px ${selectedTheme.glow}`
+                }}
+                whileHover={{ scale: 1.05 }}
+              >
+                {selectedTheme.icon}
+              </motion.div>
 
-              {/* Holographic orb */}
-              <div className="relative">
-                <motion.div
-                  className="w-[72px] h-[72px] rounded-[20px] flex items-center justify-center text-4xl font-black shadow-2xl relative overflow-hidden"
-                  style={{
-                    background: `conic-gradient(from 45deg, ${selectedTheme.color}FF, ${selectedTheme.secondary}DD, ${selectedTheme.accent}AA, ${selectedTheme.color}FF)`,
-                    boxShadow: `0 16px 48px ${selectedTheme.glow}, inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -2px 4px rgba(0,0,0,0.2)`
-                  }}
-                  whileHover={{ rotateY: 360, scale: 1.05 }}
-                  transition={{ duration: 0.8, ease: [0.175, 0.885, 0.32, 1.275] }}
-                >
-                  {/* Holographic shimmer */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-[20px]"
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  />
-                  <span className="relative z-10 drop-shadow-lg">{selectedTheme.icon}</span>
-                </motion.div>
-
-                {/* Floating status ring */}
-                <motion.div
-                  className="absolute -top-3 -right-3 w-6 h-6 rounded-full flex items-center justify-center backdrop-blur-xl"
-                  style={{
-                    background: `radial-gradient(circle, ${selectedTheme.color}CC, ${selectedTheme.secondary}88)`,
-                    boxShadow: `0 4px 12px ${selectedTheme.glow}`
-                  }}
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    rotate: [0, 180, 360]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <div className="w-2.5 h-2.5 bg-white rounded-full shadow-lg" />
-                </motion.div>
+              {/* Text */}
+              <div className="pr-2">
+                <h3 className="text-white text-sm font-semibold">{selectedTheme.name}</h3>
+                <p className="text-white/60 text-xs">{selectedTheme.subtitle}</p>
               </div>
 
-              {/* Micro interaction hint */}
-              <motion.div
-                className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl border border-white/20 flex items-center justify-center"
-                whileHover={{ scale: 1.3, rotate: 180 }}
-                transition={{ type: "spring", stiffness: 400, damping: 15 }}
-              >
-                <svg className="w-4 h-4 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
-                </svg>
-              </motion.div>
+              {/* Arrow */}
+              <svg className="w-4 h-4 text-white/40 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
           </motion.button>
 
         ) : (
-          /* Ultra-Modern Expanded Grid */
+          /* Premium Glassmorphism Expanded View */
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 30, rotateX: -15 }}
-            animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 30, rotateX: -15 }}
-            transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
             className="relative"
-            style={{ perspective: "1000px" }}
           >
-            {/* Dynamic background effects */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/15 to-white/5 rounded-[32px] blur-2xl"
-              animate={{ opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            />
+            {/* Soft ambient glow */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-[40px] blur-3xl opacity-50" />
 
-            <div className="relative bg-gradient-to-br from-black/75 via-black/60 to-black/45 backdrop-blur-[24px] rounded-[36px] p-10 border border-white/25 shadow-[0_48px_128px_rgba(0,0,0,0.6)] min-w-[380px] max-w-[420px]">
-              {/* Animated mesh background */}
-              <div className="absolute inset-0 rounded-[36px] opacity-10">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 animate-pulse" />
-              </div>
-              {/* Premium Header */}
-              <div className="flex items-center justify-between mb-10 relative">
+            <div className="relative bg-white/10 backdrop-blur-2xl rounded-[32px] p-8 border border-white/20 shadow-2xl min-w-[360px]">
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 rounded-[32px] bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+              {/* Clean Minimal Header */}
+              <div className="flex items-center justify-between mb-8 relative z-10">
                 <motion.div
-                  initial={{ opacity: 0, x: -30 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.15, type: "spring", stiffness: 200 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  <h3 className="text-white/98 text-lg font-bold tracking-[0.12em] uppercase mb-3 bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">Focus Themes</h3>
-                  <div className="flex items-center gap-3">
-                    <motion.div
-                      className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500"
-                      animate={{ scale: [1, 1.5, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    <p className="text-white/60 text-sm font-medium">Choose your cognitive state</p>
-                  </div>
+                  <h3 className="text-white text-base font-semibold mb-1">Choose Your Cognitive State</h3>
+                  <p className="text-white/60 text-xs">Select optimal focus mode for your task</p>
                 </motion.div>
 
                 <motion.button
                   onClick={() => setIsExpanded(false)}
-                  className="w-12 h-12 rounded-3xl bg-gradient-to-br from-white/15 via-white/8 to-white/5 hover:from-white/25 hover:to-white/15 flex items-center justify-center transition-all border border-white/20 shadow-lg backdrop-blur-xl group"
-                  whileHover={{ scale: 1.08, rotate: 180 }}
-                  whileTap={{ scale: 0.92 }}
-                  initial={{ opacity: 0, scale: 0.7, rotate: -90 }}
-                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                  transition={{ delay: 0.25, type: "spring", stiffness: 300 }}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all backdrop-blur-xl"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <svg className="w-6 h-6 text-white/80 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="w-5 h-5 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </motion.button>
               </div>
               
-              {/* Next-Gen Theme Grid */}
-              <div className="grid grid-cols-3 gap-5 mb-8">
+              {/* Clean Theme Grid */}
+              <div className="grid grid-cols-3 gap-3 mb-6">
                 {sphereThemes.map((theme, index) => (
                   <motion.button
                     key={theme.id}
@@ -239,197 +189,103 @@ export default function SphereSelector({ currentTheme, onThemeChange }) {
                     whileHover={{ scale: 1.03, y: -3 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    {/* Hover glow */}
-                    <motion.div
-                      className="absolute inset-0 rounded-3xl blur-xl opacity-0"
-                      style={{ background: theme.gradient }}
-                      animate={{
-                        opacity: hoveredTheme === theme.id ? 0.4 : theme.id === currentTheme ? 0.2 : 0
-                      }}
-                      transition={{ duration: 0.3 }}
-                    />
-
-                    {/* Ultra-Modern Card Container */}
-                    <div className={`relative p-6 rounded-[24px] transition-all duration-500 backdrop-blur-[16px] group ${
+                    {/* Clean Glassmorphism Card */}
+                    <div className={`relative p-4 rounded-2xl transition-all duration-300 backdrop-blur-sm ${
                       theme.id === currentTheme
-                        ? 'bg-gradient-to-br from-white/20 via-white/12 to-white/8 border-2 shadow-2xl'
-                        : 'bg-gradient-to-br from-white/10 via-white/6 to-white/3 border border-white/20 hover:from-white/16 hover:to-white/10 hover:border-white/30'
+                        ? 'bg-white/20 border-2 shadow-lg'
+                        : 'bg-white/10 border border-white/20 hover:bg-white/15'
                     }`}
                     style={{
-                      borderColor: theme.id === currentTheme ? theme.color : undefined,
-                      boxShadow: theme.id === currentTheme
-                        ? `0 12px 48px ${theme.glow}, 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.1)`
-                        : '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05)'
+                      borderColor: theme.id === currentTheme ? theme.color : undefined
                     }}>
-                      {/* Floating Icon with Holographic Effect */}
+                      {/* Simple Icon */}
                       <motion.div
-                        className="w-16 h-16 mx-auto mb-5 rounded-[18px] flex items-center justify-center text-3xl shadow-2xl relative overflow-hidden"
+                        className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center text-2xl"
                         style={{
-                          background: `conic-gradient(from 180deg, ${theme.color}FF, ${theme.secondary}DD, ${theme.accent}BB, ${theme.color}FF)`,
-                          boxShadow: `0 12px 32px ${theme.glow}, inset 0 2px 4px rgba(255,255,255,0.25), inset 0 -2px 4px rgba(0,0,0,0.15)`
+                          background: `linear-gradient(135deg, ${theme.color}, ${theme.secondary})`,
+                          boxShadow: theme.id === currentTheme ? `0 4px 20px ${theme.glow}` : 'none'
                         }}
-                        whileHover={{
-                          rotateY: 360,
-                          scale: 1.15,
-                          rotateZ: [0, 5, -5, 0]
-                        }}
-                        transition={{
-                          duration: 0.8,
-                          ease: [0.175, 0.885, 0.32, 1.275],
-                          rotateZ: { duration: 0.3 }
-                        }}>
-                        {/* Dynamic shimmer effect */}
-                        <motion.div
-                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-[18px]"
-                          animate={{ x: ['-120%', '120%'] }}
-                          transition={{
-                            duration: 2.5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            repeatDelay: 1
-                          }}
-                        />
-
-                        {/* Particle effect overlay */}
-                        <motion.div
-                          className="absolute inset-0 rounded-[18px]"
-                          style={{
-                            background: `radial-gradient(circle at 30% 30%, ${theme.particleColor}40, transparent 60%)`
-                          }}
-                          animate={{
-                            opacity: [0.3, 0.7, 0.3],
-                            scale: [1, 1.05, 1]
-                          }}
-                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        />
-
-                        <span className="relative z-10 drop-shadow-2xl font-black">{theme.icon}</span>
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <span className="drop-shadow-md">{theme.icon}</span>
                       </motion.div>
 
-                      {/* Premium Typography */}
-                      <h4 className="text-white/98 text-sm font-black tracking-[0.1em] mb-2 text-center bg-gradient-to-r from-white via-white/95 to-white/90 bg-clip-text text-transparent">
+                      {/* Clean Typography */}
+                      <h4 className="text-white text-xs font-semibold text-center mb-1">
                         {theme.name}
                       </h4>
-                      <p className="text-white/65 text-xs leading-relaxed text-center font-medium">
+                      <p className="text-white/60 text-[10px] text-center">
                         {theme.subtitle}
                       </p>
 
-                      {/* Floating Status Indicator */}
+                      {/* Active Indicator */}
                       {theme.id === currentTheme && (
                         <motion.div
-                          className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center backdrop-blur-xl"
-                          style={{
-                            background: `radial-gradient(circle, ${theme.color}DD, ${theme.secondary}AA)`,
-                            boxShadow: `0 6px 20px ${theme.glow}, 0 0 0 2px rgba(255,255,255,0.2)`
-                          }}
-                          animate={{
-                            scale: [1, 1.4, 1],
-                            rotate: [0, 360]
-                          }}
-                          transition={{
-                            scale: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-                            rotate: { duration: 4, repeat: Infinity, ease: "linear" }
-                          }}
-                        >
-                          <motion.div
-                            className="w-3 h-3 bg-white rounded-full shadow-lg"
-                            animate={{ scale: [1, 0.8, 1] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                          />
-                        </motion.div>
+                          className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white"
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
                       )}
-
-                      {/* Hover glow overlay */}
-                      <motion.div
-                        className="absolute inset-0 rounded-[24px] opacity-0"
-                        style={{ background: `linear-gradient(135deg, ${theme.color}20, ${theme.secondary}15, transparent)` }}
-                        whileHover={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                      />
                     </div>
                   </motion.button>
                 ))}
               </div>
               
-              {/* Ultra-Futuristic Psychology Panel */}
+              {/* Clean Modern Psychology Panel */}
               <motion.div
-                className="relative overflow-hidden rounded-[28px] p-7 backdrop-blur-[20px]"
+                className="relative overflow-hidden rounded-3xl p-6"
                 style={{
-                  background: `linear-gradient(135deg, ${selectedTheme.color}18, ${selectedTheme.secondary}12, ${selectedTheme.accent}08, transparent)`,
-                  border: `1.5px solid ${selectedTheme.color}50`,
-                  boxShadow: `0 16px 40px ${selectedTheme.glow}30, inset 0 1px 2px rgba(255,255,255,0.1)`
+                  background: `linear-gradient(135deg, ${selectedTheme.color}08, ${selectedTheme.secondary}06, transparent)`,
+                  border: `1px solid ${selectedTheme.color}30`,
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: `0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.05)`
                 }}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
               >
-                {/* Dynamic flowing accent */}
+                {/* Subtle accent line */}
                 <motion.div
-                  className="absolute left-0 top-0 w-2 h-full rounded-r-full"
-                  style={{ background: `linear-gradient(180deg, ${selectedTheme.color}FF, ${selectedTheme.secondary}CC, ${selectedTheme.accent}AA)` }}
-                  animate={{
-                    scaleY: [0, 1],
-                    opacity: [0.6, 1, 0.8]
-                  }}
-                  transition={{
-                    scaleY: { duration: 1.2, ease: "easeOut" },
-                    opacity: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                  }}
+                  className="absolute left-0 top-0 w-0.5 h-full rounded-r-full"
+                  style={{ background: `linear-gradient(180deg, transparent, ${selectedTheme.color}, transparent)` }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
                 />
 
-                {/* Floating particles */}
-                <div className="absolute inset-0 overflow-hidden rounded-[28px]">
-                  {[...Array(3)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-1 h-1 rounded-full opacity-40"
-                      style={{ background: selectedTheme.particleColor }}
-                      animate={{
-                        x: [0, 100, 200, 300],
-                        y: [20 + i * 15, 40 + i * 10, 25 + i * 20, 35 + i * 15],
-                        opacity: [0, 0.6, 0.3, 0]
-                      }}
-                      transition={{
-                        duration: 4 + i,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: i * 0.8
-                      }}
-                    />
-                  ))}
-                </div>
-
-                <div className="flex items-start gap-4 relative z-10">
+                <div className="flex items-start gap-4">
                   <motion.div
-                    className="w-3 h-3 rounded-full mt-3 flex-shrink-0 shadow-lg"
+                    className="w-3 h-3 rounded-full mt-1 flex-shrink-0"
                     style={{
-                      background: `radial-gradient(circle, ${selectedTheme.color}FF, ${selectedTheme.secondary}DD)`,
-                      boxShadow: `0 4px 12px ${selectedTheme.glow}`
+                      background: `radial-gradient(circle, ${selectedTheme.color}, ${selectedTheme.secondary})`,
+                      boxShadow: `0 0 12px ${selectedTheme.glow}`
                     }}
                     animate={{
-                      scale: [1, 1.4, 1],
-                      boxShadow: [`0 4px 12px ${selectedTheme.glow}`, `0 6px 20px ${selectedTheme.glow}`, `0 4px 12px ${selectedTheme.glow}`]
+                      scale: [1, 1.2, 1],
+                      opacity: [0.7, 1, 0.7]
                     }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   />
+
                   <div className="flex-1">
                     <motion.p
-                      className="text-white/85 text-sm leading-relaxed font-medium bg-gradient-to-r from-white/90 to-white/70 bg-clip-text text-transparent"
+                      className="text-white/80 text-sm leading-relaxed font-medium"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6 }}
+                      transition={{ delay: 0.5 }}
                     >
                       {selectedTheme.psychology}
                     </motion.p>
                   </div>
                 </div>
 
-                {/* Subtle animated border */}
+                {/* Subtle hover glow */}
                 <motion.div
-                  className="absolute inset-0 rounded-[28px] border opacity-30"
-                  style={{ borderColor: selectedTheme.color }}
-                  animate={{ opacity: [0.2, 0.5, 0.2] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 rounded-3xl opacity-0 pointer-events-none"
+                  style={{ background: `linear-gradient(135deg, ${selectedTheme.color}10, transparent)` }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
                 />
               </motion.div>
             </div>

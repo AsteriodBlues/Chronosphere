@@ -995,28 +995,37 @@ function EnhancedHUD({ time, setTime, isRunning, setIsRunning, sessions }) {
 
   return (
     <>
-      {/* Header */}
+      {/* Clean Dark Glass Header */}
       <div style={{
         position: 'fixed',
-        bottom: '20px',
-        left: '20px',
-        ...glassStyle,
-        zIndex: 1000
+        bottom: '24px',
+        left: '24px',
+        background: 'rgba(30, 30, 35, 0.7)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderRadius: '20px',
+        padding: '20px 32px',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+        zIndex: 1000,
+        minWidth: '280px'
       }}>
-        <div style={{ 
-          fontSize: isMobile ? '20px' : '24px', 
-          fontWeight: '700', 
-          marginBottom: '8px',
-          background: 'linear-gradient(135deg, #ffffff, #e0f0ff)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent'
+        <div style={{
+          fontSize: '28px',
+          fontWeight: '600',
+          marginBottom: '4px',
+          color: '#ffffff',
+          letterSpacing: '0.02em',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         }}>
           CHRONO.SPHERE
         </div>
-        <div style={{ 
-          fontSize: '14px', 
-          opacity: 0.8,
-          fontWeight: '400'
+        <div style={{
+          fontSize: '16px',
+          color: 'rgba(255, 255, 255, 0.6)',
+          fontWeight: '400',
+          letterSpacing: '0.01em',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
         }}>
           Advanced Focus System
         </div>
