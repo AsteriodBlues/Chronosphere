@@ -996,10 +996,10 @@ function EnhancedHUD({ time, setTime, isRunning, setIsRunning, sessions }) {
   return (
     <>
       {/* Header */}
-      <div style={{ 
-        position: 'fixed', 
-        top: '20px', 
-        left: '20px', 
+      <div style={{
+        position: 'fixed',
+        bottom: '20px',
+        left: '20px',
         ...glassStyle,
         zIndex: 1000
       }}>
