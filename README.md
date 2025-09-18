@@ -1,6 +1,8 @@
 # Chronosphere - Advanced Focus System
 
-A sophisticated 3D focus timer application featuring an interactive metallic sphere, dynamic theme system, and immersive cosmic background. Built with React, Three.js, and modern web technologies to enhance productivity through visual engagement.
+**Transform your focus sessions into an immersive 3D experience.** Chronosphere combines the proven Pomodoro technique with stunning visual feedback - watch a liquid metal sphere morph and pulse as you work, surrounded by a living galaxy that responds to your productivity. Every focus session becomes a journey through space, making productivity not just effective, but genuinely enjoyable.
+
+Perfect for developers, designers, students, and anyone who wants their work sessions to feel less like a chore and more like piloting a spacecraft through the cosmos.
 
 <div align="center">
 
