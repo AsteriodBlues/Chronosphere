@@ -26,14 +26,17 @@ Perfect for developers, designers, students, and anyone who wants their work ses
 ### 🌐 3D Interactive Sphere
 - **Liquid Metal Rendering**: Beautiful shader-based metallic sphere with dynamic reflections
 - **Real-time Animations**: Smooth morphing and pulsing effects
-- **Theme System**: Multiple sphere themes with unique color palettes
-  - Power Mode (Blue)
-  - Zen Mode (Green)
-  - Creative Mode (Purple)
-  - Focus Mode (Amber)
-  - Night Mode (Dark)
-  - Energy Mode (Red)
 - **Mouse Interaction**: Hover and click effects with visual feedback
+
+### 🎨 Sphere Color Themes
+Each theme is carefully designed with color psychology to enhance specific mental states:
+
+- **🔵 Power Mode** - Electric blue for high-intensity work and peak performance
+- **🟢 Zen Mode** - Calming emerald green to reduce stress and promote tranquility
+- **🟣 Creative Mode** - Deep purple to stimulate imagination and innovative thinking
+- **🟠 Focus Mode** - Warm amber for sustained concentration and mental clarity
+- **⚫ Night Mode** - Subtle dark tones for late-night sessions without eye strain
+- **🔴 Energy Mode** - Vibrant red to boost motivation and overcome mental fatigue
 
 ### 🌌 Immersive Background
 - **Dynamic Galaxy**: Animated star field with multiple star types
@@ -184,6 +187,15 @@ export const sphereThemes = [
 3. **Tracking Progress**: Monitor session count in the top-right corner
 4. **Adjusting Time**: Click on the timer display to modify duration
 5. **Cognitive States**: Select your mental state for optimized visuals
+
+### Choosing the Right Theme for Your Task
+
+- **Use Power Mode** when tackling challenging problems or tight deadlines
+- **Switch to Zen Mode** during breaks or when feeling overwhelmed
+- **Select Creative Mode** for brainstorming, design work, or writing
+- **Choose Focus Mode** for deep work requiring sustained attention
+- **Enable Night Mode** for evening work sessions to reduce blue light
+- **Activate Energy Mode** to push through afternoon slumps or start your day
 
 ## 🚀 Performance Optimization
 
